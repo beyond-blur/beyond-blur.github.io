@@ -1,4 +1,4 @@
-# Beyond Blur
+# BeyondBlur
 This repository contains source code for the [BeyondBlur website](https://beyond-blur.github.io).
 
 If you find BeyondBlur useful for your work please cite:
@@ -14,7 +14,7 @@ If you find BeyondBlur useful for your work please cite:
 ## Reference
 This repository is based on the source code for the [Nerfies website](https://nerfies.github.io).
 
-Please consider citing you find Nerfies useful for your work please cite
+Please consider citing Nerfies if you find it useful for your work:
 ```
 @article{park2021nerfies
   author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
