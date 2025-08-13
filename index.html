@@ -171,7 +171,7 @@
             and quality of the generated images while keeping the overall
             color palette unaffected. This work bridges fluid dynamics,
             dimensionless PDE theory, and deep generative modeling,
-            offering a fresh perspective on physically informed image
+            offering a fresh perspective on physically based inverse problems.
           </p>
         </div>
       </div>
@@ -183,15 +183,15 @@
 <!-- Contribution -->
 <section class="section">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Contribution</h2>
+    <h3 class="title is-3 has-text-centered">Contribution</h3>
     <section class="hero teaser">
       <div class="hero-body p-0">
         <figure class="image">
           <img class="center" src="./static/images/explanation.png"
-               style="display:block; margin:0 auto; width:94%; height:auto;"
+               style="display:block; margin:0 auto; width:80%; height:auto;"
                alt="(a) Input, (b) Advection (conservative), (c) Diffusion (conservative), (d) Gaussian noise (non-conservative)">
           <figcaption class="has-text-grey is-size-6"
-          style="display:block; margin:0 auto; width:91%; height:auto;">
+          style="display:block; margin:0 auto; width:80%; height:auto;">
             <strong>Interpretation.</strong>
             (a) shows the input intensity profile. (b) <em>Advection</em> moves intensity between
             locations without changing the total amount (conservative). (c) <em>Diffusion</em> blurs
@@ -206,38 +206,38 @@
       <p>
         We design a <strong>PDE-based forward corruption process</strong> for diffusion models that combines
         <strong>directional advection</strong>, <strong>isotropic diffusion</strong>, and a small <strong>Gaussian perturbation</strong>.
-        The image field \(u(x,y,t)\) evolves according to
+        The image field \(u(x,y,t)\) evolves according to,
       </p>
 
       <span class="equation" style="display:block; text-align:center; margin:.25rem 0;">
-        \( \dfrac{\partial u}{\partial t} + \nabla\!\cdot\!(v\,u) \;=\; \nabla\!\cdot(\alpha\,\nabla u) \;+\; \dot{Q}(t) \)
+        \( \dfrac{\partial u}{\partial t} + \nabla\!\cdot\!(v\,u) \;=\; \nabla\!\cdot(\alpha\,\nabla u) \;+\; \dot{Q}(t) \).
       </span>
 
+      Where:
       <ul>
-        <li><strong>Advection</strong> (\(\nabla\!\cdot(vu)\)) - shifts intensities along a turbulent velocity field \(v\),
-            producing coherent, structured motions while preserving the global “mass” (color sum).</li>
-        <li><strong>Diffusion</strong> (\(\nabla\!\cdot(\alpha\nabla u)\)) - smooths local variations, also conservative.</li>
-        <li><strong>Reaction</strong> (\(\dot Q(t)\)) - a <em>small</em> Gaussian noise term added only before the reverse network.</li>
+        <li><strong>Advection</strong>, \(\nabla\!\cdot(vu)\) — rearrange intensities in a spatially coherent way as dictated by an external velocity field, \(v\),
+          which inherently preserves the global “mass” (color sum).</li>
+        <li><strong>Diffusion</strong>,\(\nabla\!\cdot(\alpha\nabla u)\) — blurs local variations, also conservative.</li>
+        <li><strong>Reaction</strong>, \( \dot Q(t) \) — a Gaussian noise.</li>
       </ul>
 
       <p>
-        In our forward trajectory, advection is introduced in controlled amounts, serving primarily
-        to induce variability in the corruption paths and to study the influence of the advection term.
-        This produces <strong>directional, flow-like texture changes</strong> beyond what isotropic blur can achieve.
-        Gaussian noise remains minimal, ensuring that the forward process stays physically consistent
-        and that the global color palette is preserved.
+        In the forward corruption process, the turbulent advection induces variability in the trajectory by other means than traditional Gaussian noise.
+        This produces <strong>directional, flow-like texture shifts</strong> beyond what isotropic blur can achieve.
+        The Gaussian noise is added just before passing data to the neural network to regularize training, while keeping the forward process physically consistent.
+        Therefore the global color palette is preserved by design.
       </p>
 
       <p>
-        We implement this PDE numerically using a <strong>GPU-accelerated Lattice Boltzmann Method (LBM)</strong>,
-        which efficiently handles the coupled advection–diffusion dynamics at image scale. Advection is driven by a
-        <strong>spectrally generated turbulent velocity field</strong> with controllable multi-scale energy, enabling
-        resolution-independent control of flow patterns through two dimensionless parameters:
+        We solve the PDE numerically using a <strong>GPU-accelerated Lattice Boltzmann Method (LBM)</strong>,
+        which efficiently handles the coupled advection-diffusion dynamics at image scale. Advection is driven by a
+        <strong>spectrally generated turbulent velocity field</strong> with controllable multi-scale energy.
+        The resolution-independent control of flow patterns is enabled by two similarity numbers:
       </p>
 
       <ul>
-        <li><strong>Fourier number (Fo)</strong> — total diffusion per step.</li>
-        <li><strong>Péclet number (Pe)</strong> — ratio of advection to diffusion.</li>
+        <li><strong>Fourier number (Fo)</strong> — dimensionless time.</li>
+        <li><strong>Péclet number (Pe)</strong> — dimensionless ratio of advection to diffusion.</li>
       </ul>
 
       <p>
