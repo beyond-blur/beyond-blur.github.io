@@ -24,6 +24,8 @@
     <!-- Theme used for syntax highlighting of code -->
     <link rel="stylesheet" href="plugin/highlight/monokai.css">
 
+    <link rel="stylesheet" href="css/custom.css">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
 </head>
 
@@ -69,33 +71,31 @@
             </section> -->
 
             <section>
-                <h2>Beyond Blur</h2>
+                <h3>Beyond Blur</h3>
                 <p>
                     A Fluid Perspective on Generative Diffusion Models
                 </p>
-                <img src="my_images/big_cat.png" alt="The cat"
-                    style="max-height: 20vh; width: auto; margin-bottom: 1.5rem; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
-                <p>
-                    The <b>generative model </b> that integrates <br> the <b>advection </b>(shift) term
-                    along <b>blurring </b> (averaging) <br>
-                    and a <b>random</b> reaction (Gaussian noise)
-                </p>
+                <img src="my_images/big_cat.png" alt="The cat" class="scale-controlled">
+                <p><small>
+                        The <b>generative model </b> that integrates <br> the <b>advection </b>(shift) term
+                        along <b>blurring </b> (averaging) <br>
+                        and a <b>random</b> reaction (Gaussian noise)
+                    </small></p>
             </section>
 
             <section>
                 <!-- <h2>Comparison of forward processes</h2> -->
-                <h2>Diffusion Model Families</h2>
+                <h3>Diffusion Model Families</h3>
                 <img src="my_images/diffusion_model_families.png"
-                    alt="Comparison of diffusion, IHD, and ADE model pipelines"
-                    style="max-height: 33vh; width: auto; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+                    alt="Comparison of diffusion, IHD, and ADE model pipelines" class="scale-controlled">
             </section>
 
 
             <section>
-                <h2>Contribution </h2>
+                <h3>Contribution </h3>
 
                 <img src="my_images/corruption_2.png" alt="Comparison of diffusion, IHD, and ADE model pipelines"
-                    style="max-height: 33vh; width: auto; margin-bottom: 1.5rem; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+                    class="scale-controlled">
                 <p>
                     Corruption process
                     <small>
@@ -112,9 +112,12 @@
 
             <section>
                 <h3>Math Background</h3>
-                Our forward pass formulates image corruption
-                via a physically motivated PDE that couples directional advection with isotropic
-                diffusion and Gaussian noise,
+
+                <small>
+                    Our forward pass formulates image corruption
+                    via a physically motivated PDE that couples directional advection with isotropic
+                    diffusion and Gaussian noise,
+                </small>
                 <p>
                     \[
                     \frac{\partial u}{\partial t}
@@ -131,8 +134,7 @@
 
             <section>
                 <h3>Overview of the NN training pipeline</h3>
-                <img src="my_images/DDPM-ADE-flowchart.png" alt="Training flowchart"
-                    style="max-height: 30vh; width: auto; margin-bottom: 1.5rem; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+                <img src="my_images/DDPM-ADE-flowchart.png" alt="Training flowchart" class="scale-controlled">
 
                 <p><small>
                         The image corruptor applies the advection--diffusion operator during each of the discrete time
@@ -145,8 +147,7 @@
 
             <section>
                 <h3>Turbulent Velocity Field</h3>
-                <img src="my_images/force_plt_mag_at_00010.png" alt="Velocity field magnitude"
-                    style="max-height: 50vh; width: auto; margin-bottom: 1.5rem; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+                <img src="my_images/force_plt_mag_at_00010.png" alt="Velocity field magnitude" class="scale-controlled">
 
                 <p>
                     <small>
@@ -158,7 +159,7 @@
             <section>
                 <h3>Energy Spectrum</h3>
                 <img src="my_images/noisy_rho_spectrum_at_250_arrows.png" alt="Energy Spectrum of corrupted images"
-                    style="max-height: 50vh; width: auto; margin-bottom: 1.5rem; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+                    class="scale-controlled">
 
                 <p>
                     <small>
@@ -171,8 +172,7 @@
             <section>
                 <h3>Scale control</h3>
 
-                <img src="my_images/sculpture.png" alt="Generated_samples"
-                    style="max-height: 25vh; width: auto; margin-bottom: 1.5rem; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+                <img src="my_images/sculpture.png" alt="sculpture" class="scale-controlled">
 
                 <small>
                     <p>
@@ -190,8 +190,7 @@
 
             <section>
                 <h3>Generated samples</h3>
-                <img src="my_images/Generated_samples.png" alt="Generated_samples"
-                    style="max-height: 33vh; width: auto; margin-bottom: 1.5rem; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+                <img src="my_images/Generated_samples.png" alt="Generated_samples" class="scale-controlled">
 
                 <p><small>
                         The baseline values refer to purely blurring approach at $Pe=0$.
