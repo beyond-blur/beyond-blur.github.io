@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="Beyond Blur: A PDE-driven advection-diffusion image corruption process for generative synthesis, leveraging a GPU-accelerated Lattice Boltzmann solver and stochastic turbulence.">
-  <meta name="keywords" content="BeyondBlur, Beyond-Blur, generative diffusion, PDE-driven corruption, Lattice Boltzmann, stochastic turbulence, neural reverse operator, Peclet number, Fourier number, fluid dynamics">
+    content="Beyond Blur: A PDE-driven advection-diffusion image corruption process for generative synthesis, leveraging a GPU-accelerated Lattice Boltzmann solver and stochastic turbulence.">
+  <meta name="keywords"
+    content="BeyondBlur, Beyond-Blur, generative diffusion, PDE-driven corruption, Lattice Boltzmann, stochastic turbulence, neural reverse operator, Peclet number, Fourier number, fluid dynamics">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Beyond Blur: A Fluid Perspective on Generative Diffusion Models</title>
 
@@ -12,7 +14,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-P4Z0JYDZ1J"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
     gtag('config', 'G-P4Z0JYDZ1J');
@@ -21,7 +23,7 @@
   <script>
     window.MathJax = {
       tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
     };
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
@@ -37,8 +39,15 @@
 
   <!-- Small alignment helpers -->
   <style>
-    .image img.center { display:block; margin:0 auto; }
-    .hero.teaser .hero-body { padding-top:0; padding-bottom:0; }
+    .image img.center {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .hero.teaser .hero-body {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
   </style>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -47,243 +56,274 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
 </head>
+
 <body>
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-  <div class="navbar-menu">
-    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-      <a class="navbar-item" href="https://web.njit.edu/~przem/">
-        <span class="icon"><i class="fas fa-home"></i></span>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
       </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="https://web.njit.edu/~przem/">
+          <span class="icon"><i class="fas fa-home"></i></span>
+        </a>
 
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">More Research</a>
-        <div class="navbar-dropdown">
-          <a class="navbar-item" href="https://facaid.github.io/">FaçAID</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">More Research</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://facaid.github.io/">FaçAID</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<!-- Title / Authors -->
-<section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Beyond Blur: A Fluid Perspective on Generative Diffusion Models</h1>
-          <h2 class="title is-5">ICCV 2025</h2>
-
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://www.linkedin.com/in/ggruszczynski/">Grzegorz Gruszczynski</a><sup>1,2</sup>,</span>
-            <span class="author-block">
-              <a href="https://scholar.google.com/citations?user=yWLO4WMAAAAJ&hl=pl">Jakub Jerzy Meixner</a><sup>1,3</sup>,</span>
-            <span class="author-block">
-              <a href="https://scholar.google.com/citations?view_op=list_works&hl=en&hl=en&user=tJZaT_4AAAAJ">Michal Jan Wlodarczyk</a><sup>1,4</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://web.njit.edu/~przem/">Przemyslaw Musialski</a><sup>1,5,6</sup>,
-            </span>
-          </div>
-
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>IDEAS NCBR,</span>
-            <span class="author-block"><sup>2</sup>Samsung AI Center Warsaw,</span>
-            <span class="author-block"><sup>3</sup>Polish Academy of Sciences,</span>
-            <span class="author-block"><sup>4</sup>Warsaw University of Technology,</span>
-            <span class="author-block"><sup>5</sup>IDEAS Research Institute,</span>
-            <span class="author-block"><sup>6</sup>New Jersey Institute of Technology</span>
-          </div>
-
+  <!-- Title / Authors -->
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
           <div class="column has-text-centered">
-            <div class="publication-links">
-              <span class="link-block">
-                <a href="https://arxiv.org/pdf/2506.16827" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                  <span>Paper</span>
-                </a>
+            <h1 class="title is-1 publication-title">Beyond Blur: A Fluid Perspective on Generative Diffusion Models
+            </h1>
+            <h2 class="title is-5">ICCV 2025</h2>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/ggruszczynski/">Grzegorz Gruszczynski</a><sup>1,2</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=yWLO4WMAAAAJ&hl=pl">Jakub Jerzy
+                  Meixner</a><sup>1,3</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?view_op=list_works&hl=en&hl=en&user=tJZaT_4AAAAJ">Michal
+                  Jan Wlodarczyk</a><sup>1,4</sup>,
               </span>
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2506.16827" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon"><i class="ai ai-arxiv"></i></span>
-                  <span>arXiv</span>
-                </a>
+              <span class="author-block">
+                <a href="https://web.njit.edu/~przem/">Przemyslaw Musialski</a><sup>1,5,6</sup>,
               </span>
-              <!-- Optional video/code/data buttons kept commented -->
             </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>IDEAS NCBR,</span>
+              <span class="author-block"><sup>2</sup>Samsung AI Center Warsaw,</span>
+              <span class="author-block"><sup>3</sup>Polish Academy of Sciences,</span>
+              <span class="author-block"><sup>4</sup>Warsaw University of Technology,</span>
+              <span class="author-block"><sup>5</sup>IDEAS Research Institute,</span>
+              <span class="author-block"><sup>6</sup>New Jersey Institute of Technology</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2506.16827" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2506.16827" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="presentation_reveal_js/presentations_iccv_2025.html"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-chalkboard"></i></span>
+                    <span>Presentation</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://www.youtube.com/" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-youtube"></i></span>
+                    <span>YouTube (wip)</span>
+                  </a>
+                </span>
+                <!-- Optional video/code/data buttons kept commented -->
+              </div>
+            </div>
+
           </div>
-
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Header visual in hero-teaser style (centered + same max width) -->
-<section class="hero teaser">
-  <div class="hero-body">
-    <div class="container is-widescreen">
-      <figure class="image" style="margin-bottom:1rem;">
-        <img src="./static/images/header.png" alt="Method comparison."
-             style="display:block; margin:0 auto; width:85%; height:auto;">
-      </figure>
-    </div>
-    <div class="container is-max-desktop">
-      <h2 class="subtitle has-text-centered">
-        <span class="header">BeyondBlur</span> generalizes existing approaches and proposes a new physics inspired way to think about corruption.
-      </h2>
-    </div>
-  </div>
-</section>
-
-<!-- Abstract -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            We propose a novel PDE-driven corruption process for generative image synthesis based on advection-diffusion processes which generalizes existing PDE-based approaches.
-          </p>
-          <p>
-            Our forward pass formulates image corruption via a physically motivated PDE that couples directional advection
-            with isotropic diffusion and Gaussian noise, controlled by
-            dimensionless numbers (Péclet, Fourier). We implement this
-            PDE numerically through a GPU-accelerated custom Lattice Boltzmann solver for fast evaluation. To induce realistic
-            “turbulence,” we generate stochastic velocity fields that introduce coherent motion and capture multi-scale mixing. In
-            the generative process, a neural network learns to reverse
-            the advection-diffusion operator thus constituting a novel
-            generative model.
-          </p>
-          <p>
-            We discuss how previous methods emerge
-            as specific cases of our operator, demonstrating that our
-            framework generalizes prior PDE-based corruption techniques. We illustrate how advection improves the diversity
-            and quality of the generated images while keeping the overall
-            color palette unaffected. This work bridges fluid dynamics,
-            dimensionless PDE theory, and deep generative modeling,
-            offering a fresh perspective on physically based inverse problems.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- /Abstract -->
-
-<!-- Contribution -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <h3 class="title is-3 has-text-centered">Contribution</h3>
-    <section class="hero teaser">
-      <div class="hero-body p-0">
-        <figure class="image">
-          <img class="center" src="./static/images/explanation.png"
-               style="display:block; margin:0 auto; width:80%; height:auto;"
-               alt="(a) Input, (b) Advection (conservative), (c) Diffusion (conservative), (d) Gaussian noise (non-conservative)">
-          <figcaption class="has-text-grey is-size-6"
-          style="display:block; margin:0 auto; width:80%; height:auto;">
-            <strong>Interpretation.</strong>
-            (a) shows the input intensity profile. (b) <em>Advection</em> moves intensity between
-            locations without changing the total amount (conservative). (c) <em>Diffusion</em> blurs
-            intensity between neighbors, also conservative. (d) <em>Gaussian noise</em> increases or
-            decreases intensity locally (non-conservative).
-          </figcaption>
+  <!-- Header visual in hero-teaser style (centered + same max width) -->
+  <section class="hero teaser">
+    <div class="hero-body">
+      <div class="container is-widescreen">
+        <figure class="image" style="margin-bottom:1rem;">
+          <img src="./static/images/header.png" alt="Method comparison."
+            style="display:block; margin:0 auto; width:85%; height:auto;">
         </figure>
       </div>
-    </section>
-
-    <div class="content is-size-6 has-text-black contribution-text">
-      <p>
-        We design a <strong>PDE-based forward corruption process</strong> for diffusion models that combines
-        <strong>directional advection</strong>, <strong>isotropic diffusion</strong>, and a small <strong>Gaussian perturbation</strong>.
-        The image field \(u(x,y,t)\) evolves according to,
-      </p>
-
-      <span class="equation" style="display:block; text-align:center; margin:.25rem 0;">
-        \( \dfrac{\partial u}{\partial t} + \nabla\!\cdot\!(v\,u) \;=\; \nabla\!\cdot(\alpha\,\nabla u) \;+\; \dot{Q}(t) \).
-      </span>
-
-      Where:
-      <ul>
-        <li><strong>Advection</strong>, \(\nabla\!\cdot(vu)\) — rearrange intensities in a spatially coherent way as dictated by an external velocity field, \(v\),
-          which inherently preserves the global “mass” (color sum).</li>
-        <li><strong>Diffusion</strong>,\(\nabla\!\cdot(\alpha\nabla u)\) — blurs local variations, also conservative.</li>
-        <li><strong>Reaction</strong>, \( \dot Q(t) \) — a Gaussian noise.</li>
-      </ul>
-
-      <p>
-        In the forward corruption process, the turbulent advection induces variability in the trajectory by other means than traditional Gaussian noise.
-        This produces <strong>directional, flow-like texture shifts</strong> beyond what isotropic blur can achieve.
-        The Gaussian noise is added just before passing data to the neural network to regularize training, while keeping the forward process physically consistent.
-        Therefore the global color palette is preserved by design.
-      </p>
-
-      <p>
-        We solve the PDE numerically using a <strong>GPU-accelerated Lattice Boltzmann Method (LBM)</strong>,
-        which efficiently handles the coupled advection-diffusion dynamics at image scale. Advection is driven by a
-        <strong>spectrally generated turbulent velocity field</strong> with controllable multi-scale energy.
-        The resolution-independent control of flow patterns is enabled by two similarity numbers:
-      </p>
-
-      <ul>
-        <li><strong>Fourier number (Fo)</strong> — dimensionless time.</li>
-        <li><strong>Péclet number (Pe)</strong> — dimensionless ratio of advection to diffusion.</li>
-      </ul>
-
-      <p>
-        When \( \mathrm{Pe}=0 \), the method reduces to prior isotropic PDE-based corruptions
-        (e.g., heat-equation blur), making our approach a <strong>superset</strong> of earlier models.
-      </p>
+      <div class="container is-max-desktop">
+        <h2 class="subtitle has-text-centered">
+          <span class="header">BeyondBlur</span> generalizes existing approaches and proposes a new physics inspired way
+          to think about corruption.
+        </h2>
+      </div>
     </div>
+  </section>
 
-  </div>
-</section>
-<!-- /Contribution -->
+  <!-- Abstract -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              We propose a novel PDE-driven corruption process for generative image synthesis based on
+              advection-diffusion processes which generalizes existing PDE-based approaches.
+            </p>
+            <p>
+              Our forward pass formulates image corruption via a physically motivated PDE that couples directional
+              advection
+              with isotropic diffusion and Gaussian noise, controlled by
+              dimensionless numbers (Péclet, Fourier). We implement this
+              PDE numerically through a GPU-accelerated custom Lattice Boltzmann solver for fast evaluation. To induce
+              realistic
+              “turbulence,” we generate stochastic velocity fields that introduce coherent motion and capture
+              multi-scale mixing. In
+              the generative process, a neural network learns to reverse
+              the advection-diffusion operator thus constituting a novel
+              generative model.
+            </p>
+            <p>
+              We discuss how previous methods emerge
+              as specific cases of our operator, demonstrating that our
+              framework generalizes prior PDE-based corruption techniques. We illustrate how advection improves the
+              diversity
+              and quality of the generated images while keeping the overall
+              color palette unaffected. This work bridges fluid dynamics,
+              dimensionless PDE theory, and deep generative modeling,
+              offering a fresh perspective on physically based inverse problems.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- /Abstract -->
 
-<!-- BibTeX -->
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@article{gruszczynski2025blurfluidperspectivegenerative
+  <!-- Contribution -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <h3 class="title is-3 has-text-centered">Contribution</h3>
+      <section class="hero teaser">
+        <div class="hero-body p-0">
+          <figure class="image">
+            <img class="center" src="./static/images/explanation.png"
+              style="display:block; margin:0 auto; width:80%; height:auto;"
+              alt="(a) Input, (b) Advection (conservative), (c) Diffusion (conservative), (d) Gaussian noise (non-conservative)">
+            <figcaption class="has-text-grey is-size-6" style="display:block; margin:0 auto; width:80%; height:auto;">
+              <strong>Interpretation.</strong>
+              (a) shows the input intensity profile. (b) <em>Advection</em> moves intensity between
+              locations without changing the total amount (conservative). (c) <em>Diffusion</em> blurs
+              intensity between neighbors, also conservative. (d) <em>Gaussian noise</em> increases or
+              decreases intensity locally (non-conservative).
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <div class="content is-size-6 has-text-black contribution-text">
+        <p>
+          We design a <strong>PDE-based forward corruption process</strong> for diffusion models that combines
+          <strong>directional advection</strong>, <strong>isotropic diffusion</strong>, and a small <strong>Gaussian
+            perturbation</strong>.
+          The image field \(u(x,y,t)\) evolves according to,
+        </p>
+
+        <span class="equation" style="display:block; text-align:center; margin:.25rem 0;">
+          \( \dfrac{\partial u}{\partial t} + \nabla\!\cdot\!(v\,u) \;=\; \nabla\!\cdot(\alpha\,\nabla u) \;+\;
+          \dot{Q}(t) \).
+        </span>
+
+        Where:
+        <ul>
+          <li><strong>Advection</strong>, \(\nabla\!\cdot(vu)\) — rearrange intensities in a spatially coherent way as
+            dictated by an external velocity field, \(v\),
+            which inherently preserves the global “mass” (color sum).</li>
+          <li><strong>Diffusion</strong>,\(\nabla\!\cdot(\alpha\nabla u)\) — blurs local variations, also conservative.
+          </li>
+          <li><strong>Reaction</strong>, \( \dot Q(t) \) — a Gaussian noise.</li>
+        </ul>
+
+        <p>
+          In the forward corruption process, the turbulent advection induces variability in the trajectory by other
+          means than traditional Gaussian noise.
+          This produces <strong>directional, flow-like texture shifts</strong> beyond what isotropic blur can achieve.
+          The Gaussian noise is added just before passing data to the neural network to regularize training, while
+          keeping the forward process physically consistent.
+          Therefore the global color palette is preserved by design.
+        </p>
+
+        <p>
+          We solve the PDE numerically using a <strong>GPU-accelerated Lattice Boltzmann Method (LBM)</strong>,
+          which efficiently handles the coupled advection-diffusion dynamics at image scale. Advection is driven by a
+          <strong>spectrally generated turbulent velocity field</strong> with controllable multi-scale energy.
+          The resolution-independent control of flow patterns is enabled by two similarity numbers:
+        </p>
+
+        <ul>
+          <li><strong>Fourier number (Fo)</strong> — dimensionless time.</li>
+          <li><strong>Péclet number (Pe)</strong> — dimensionless ratio of advection to diffusion.</li>
+        </ul>
+
+        <p>
+          When \( \mathrm{Pe}=0 \), the method reduces to prior isotropic PDE-based corruptions
+          (e.g., heat-equation blur), making our approach a <strong>superset</strong> of earlier models.
+        </p>
+      </div>
+
+    </div>
+  </section>
+  <!-- /Contribution -->
+
+  <!-- BibTeX -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@article{gruszczynski2025blurfluidperspectivegenerative
   author    = {Grzegorz Gruszczynski and Jakub J Meixner and Michal Jan Wlodarczyk and Przemyslaw Musialski},
   title     = {Beyond Blur: A Fluid Perspective on Generative Diffusion Models},
   journal   = {ICCV},
   year      = {2025},
 }</code></pre>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link" href="./static/pdf/paper.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/IDEAS-NCBR-Computer-Graphics-Group" class="external-link" disabled>
-        <i class="fab fa-github"></i>
-      </a>
     </div>
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content" style="text-align:center;">
-          <p>
-            This website template was taken from <a href="https://nerfies.github.io/">Nerfies</a>
-          </p>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="./static/pdf/paper.pdf">
+          <i class="fas fa-file-pdf"></i>
+        </a>
+        <a class="icon-link" href="https://github.com/IDEAS-NCBR-Computer-Graphics-Group" class="external-link"
+          disabled>
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content" style="text-align:center;">
+            <p>
+              This website template was taken from <a href="https://nerfies.github.io/">Nerfies</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</footer>
+  </footer>
 
 </body>
+
 </html>

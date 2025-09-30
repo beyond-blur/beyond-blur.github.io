@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>reveal.js – The HTML Presentation Framework</title>
+
+    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+    <meta name="author" content="Hakim El Hattab">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <!-- <link rel="stylesheet" href="dist/theme/black.css" id="theme"> -->
+
+    <!-- <link rel="stylesheet" href="dist/theme/solarized.css" id="theme"> -->
+    <link rel="stylesheet" href="dist/theme/white.css" id="theme">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+</head>
+
+<body>
+
+    <div class="reveal">
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section>
+                <a href="https://iccv.thecvf.com/">
+                    <img src="my_images/ICCV_2025_Logo_Color.png" alt="iccv 2025 logo"
+                        style="height: 180px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo">
+                </a>
+                <h3>Beyond Blur</h3>
+                <p>
+                    <small> by <br>
+                        <a href="https://www.linkedin.com/in/ggruszczynski/">Grzegorz Gruszczynski</a> <br>
+                        <a href="https://www.linkedin.com/in/jmeixner/">Jakub Meixner</a> <br>
+                        <a href="https://www.linkedin.com/in/michal-jan-wlodarczyk/">Michal Wlodarczyk</a> <br>
+                        <a href="https://web.njit.edu/~przem/">Przemyslaw Musialski</a> <br>
+                    </small>
+
+
+                    <br><br><br>
+
+                    <img src="my_images/ideas_logo_black_trans.png" alt="logo"
+                        style="width: 180px; margin: 0 2rem  4rem auto; background: transparent;" class="demo-logo">
+                    <img src="my_images/NJIT_black.png" alt="logo"
+                        style="width: 180px; margin: 0 2rem  4rem auto; background: transparent;" class="demo-logo">
+                    <img src="my_images/Samsung_Orig_Wordmark_BLACK_RGB.png" alt="logo"
+                        style="width: 180px; margin: 0 2rem  4rem auto; background: transparent;" class="demo-logo">
+
+
+                </p>
+            </section>
+            <!-- 
+            <section>
+                <h2>Beyond Blur</h2>
+                <p>
+                    A Fluid Perspective on Generative Diffusion Models
+                </p>
+            </section> -->
+
+            <section>
+                <h2>Beyond Blur</h2>
+                <p>
+                    A Fluid Perspective on Generative Diffusion Models
+                </p>
+                <img src="my_images/big_cat.png" alt="The cat"
+                    style="max-height: 20vh; width: auto; margin-bottom: 1.5rem; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+                <p>
+                    The <b>generative model </b> that integrates <br> the <b>advection </b>(shift) term
+                    along <b>blurring </b> (averaging) <br>
+                    and a <b>random</b> reaction (Gaussian noise)
+                </p>
+            </section>
+
+            <section>
+                <!-- <h2>Comparison of forward processes</h2> -->
+                <h2>Diffusion Model Families</h2>
+                <img src="my_images/diffusion_model_families.png"
+                    alt="Comparison of diffusion, IHD, and ADE model pipelines"
+                    style="max-height: 20vh; width: auto; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+            </section>
+
+
+            <section>
+                <h2>Contribution </h2>
+
+                <img src="my_images/corruption_2.png" alt="Comparison of diffusion, IHD, and ADE model pipelines"
+                    style="max-height: 33vh; width: auto; margin-bottom: 1.5rem; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+                <p>
+                    Corruption process
+                    <small>
+                        (a) input image
+                        <br>
+                        (b) advection and
+                        (c) blur “redistribute” the intensities but preserve the total “mass”, i.e., pixel-intensity sum
+                        (conservative).
+                        <br>
+                        (d) Gaussian noise adds or subtracts “mass” (non-conservative).
+                    </small>
+                <p>
+            </section>
+
+            <section>
+                <h3>Math Background</h3>
+                Our forward pass formulates image corruption
+                via a physically motivated PDE that couples directional advection with isotropic
+                diffusion and Gaussian noise,
+                <p>
+                    \[
+                    \frac{\partial u}{\partial t}
+                    \;+\;
+                    \underbrace{\nabla \cdot\! (\mathbf{v} \! \,u) }_{\text{advection}}
+                    \;=\;
+                    \underbrace{\nabla \cdot ( \alpha \, \nabla u)}_{\text{diffusion}}
+                    + \underbrace{\dot{Q}(t) }_{\text{reaction}}.
+                    \]
+                </p>
+            </section>
+
+
+
+            <section>
+                <h3>Overview of the NN training pipeline</h3>
+                <img src="my_images/DDPM-ADE-flowchart.png" alt="Training flowchart"
+                    style="max-width: 90%; height: auto; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+
+                <p><small>
+                        The image corruptor applies the advection--diffusion operator during each of the discrete time
+                        steps.
+                        The NN is trained on pairs of images destroyed up to the prescribed time, as dictated by the
+                        scheduler.
+                    </small>
+                </p>
+            </section>
+
+            <section>
+                <h3>Turbulent Velocity Field</h3>
+                <img src="my_images/force_plt_mag_at_00010.png" alt="Velocity field magnitude"
+                    style="max-height: 33vh; width: auto; margin-bottom: 1.5rem; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+
+                <p>
+                    <small>
+                        Generated velocity field. Colored by the velocity field magnitude (normalized).
+                    </small>
+                </p>
+            </section>
+
+            <section>
+                <h3>Energy Spectrum</h3>
+                <img src="my_images/noisy_rho_spectrum_at_250_arrows.png" alt="Energy Spectrum of corrupted images"
+                    style="max-height: 33vh; width: auto; margin-bottom: 1.5rem; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+
+                <p>
+                    <small>
+                        Comparison of the Energy Spectrum of an image subjected to different corruption processes.
+                    </small>
+                </p>
+            </section>
+
+
+            <section>
+                <h3>Scale control</h3>
+
+                <img src="my_images/sculpture.png" alt="Generated_samples"
+                    style="max-height: 25vh; height: auto; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+
+                <small>
+                    <p>
+                        - To quantify the ratio of advective transport to diffusion rate,
+                        we use a dimensionless Peclet number, $Pe = VL/\alpha$.
+
+                        <br><br>
+
+                        - The Fourier number, $Fo = \alpha t / (L \cdot L)$, can be considered as non-dimensional
+                        time.
+                    </p>
+                </small>
+
+            </section>
+
+            <section>
+                <h3>Generated samples</h3>
+                <img src="my_images/Generated_samples.png" alt="Generated_samples"
+                    style="max-height: 30vh; height: auto; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);">
+
+                <p><small>
+                        The baseline values refer to purely blurring approach at $Pe=0$.
+                    </small>
+                </p>
+            </section>
+
+
+
+
+            <section>
+                <h3>Results</h3>
+                <!-- Put this inside a <section> of your Reveal.js deck -->
+
+                <p><small>
+                        <!-- To quantify the ratio of advective transport to diffusion rate,
+                        we use a dimensionless Peclet number $Pe = VL/\alpha$.
+                        The baseline values refer to purely blurring approach at $Pe=0$. -->
+                        We evaluate the FID and Precision-Recall-Density-Coverage (PRDC) metrics <br>
+                        on the FFHQ 128x128 dataset.
+                    </small></p>
+                <br>
+
+                <style>
+                    .results-table {
+                        height: 80%;
+                        border-collapse: collapse;
+                        font-size: 0.85em;
+                        /* tweak for slide fit */
+                        table-layout: fixed;
+                    }
+
+                    .results-table th,
+                    .results-table td {
+                        border-bottom: 1px solid #ddd;
+                        padding: 6px 4px;
+                        text-align: center;
+                    }
+
+                    .results-table thead th {
+                        border-bottom: 2px solid #666;
+                    }
+
+                    .good {
+                        background: #32CD32;
+                        color: #000;
+                    }
+
+                    /* LimeGreen */
+                    .ok {
+                        background: #ADFF2F;
+                        color: #000;
+                    }
+
+                    /* GreenYellow */
+                </style>
+
+
+
+                <table class="results-table">
+                    <!-- <caption>Evaluation metrics for different Peclet numbers on FFHQ 128x128 dataset.</caption> -->
+                    <thead>
+                        <tr>
+                            <th>Pe</th>
+                            <th>FID&nbsp;↓</th>
+                            <th>P&nbsp;↑</th>
+                            <th>R&nbsp;↑</th>
+                            <th>D&nbsp;↑</th>
+                            <th>C&nbsp;↑</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0 (IHD)</td>
+                            <td>55.87</td>
+                            <td>0.798</td>
+                            <td>0.109</td>
+                            <td>0.762</td>
+                            <td>0.482</td>
+                        </tr>
+                        <tr>
+                            <td>0.02</td>
+                            <td>56.57</td>
+                            <td>0.797</td>
+                            <td>0.102</td>
+                            <td>0.806</td>
+                            <td>0.491</td>
+                        </tr>
+                        <tr>
+                            <td>0.04</td>
+                            <td>51.44</td>
+                            <td>0.815</td>
+                            <td>0.115</td>
+                            <td>0.921</td>
+                            <td>0.539</td>
+                        </tr>
+                        <tr>
+                            <td>0.06</td>
+                            <td class="good">36.64</td>
+                            <td class="good">0.826</td>
+                            <td class="ok">0.243</td>
+                            <td class="ok">1.040</td>
+                            <td class="good">0.665</td>
+                        </tr>
+                        <tr>
+                            <td>0.08</td>
+                            <td class="ok">37.41</td>
+                            <td class="ok">0.817</td>
+                            <td class="good">0.247</td>
+                            <td class="good">1.043</td>
+                            <td class="ok">0.662</td>
+                        </tr>
+                        <tr>
+                            <td>0.10</td>
+                            <td>42.88</td>
+                            <td>0.764</td>
+                            <td>0.187</td>
+                            <td>0.854</td>
+                            <td>0.556</td>
+                        </tr>
+                        <tr>
+                            <td>0.12</td>
+                            <td>48.62</td>
+                            <td>0.688</td>
+                            <td>0.183</td>
+                            <td>0.683</td>
+                            <td>0.510</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section>
+                <h3>Conclusions</h3>
+                <!-- <img src="my_images/DDPM-ADE-flowchart.png" alt="Training flowchart"
+                    style="max-width: 90%; height: auto; border-radius: 12px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);"> -->
+
+                <p><small>
+                        The advection term improves the quality of generated images
+                        compared to the baseline approach (blurring only).
+                    </small></p>
+            </section>
+
+            <!-- <section>
+                <pre>
+                    @article{gruszczynski2025blurfluidperspectivegenerative
+                    author = {Grzegorz Gruszczynski and Jakub Meixner and Michal Jan Wlodarczyk and Przemyslaw Musialski},
+                    title = {Beyond Blur: A Fluid Perspective on Generative Diffusion Models},
+                    journal = {ICCV},
+                    year = {2025},
+                }
+                </pre>
+            </section> -->
+
+        </div>
+
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/search/search.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/math/math.js"></script>
+    <script>
+
+        // Also available as an ES module, see:
+        // https://revealjs.com/initialization/
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath.KaTeX]
+        });
+
+    </script>
+
+</body>
+
+</html>
